@@ -1,0 +1,28 @@
+name: Merge Main to Production
+
+on:
+  schedule:
+    - cron: '0 0 */4 * *' # Runs at midnight (UTC) every 4 days
+  workflow_dispatch:
+
+jobs:
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+      - name: Merge main into production
+        run: |
+          git checkout production
+          git pull origin production
+          git merge origin/main -m "Automated merge of main into production"
+          git push origin production

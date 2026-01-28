@@ -1,0 +1,50 @@
+ .tricolor-bar {
+            background: linear-gradient(to right, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%);
+        }
+        .card-glow {
+            box-shadow: 0 10px 30px -5px rgba(30, 58, 138, 0.1);
+        }
+        .stats-card {
+            transition: all 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+        .badge-card {
+            transition: all 0.3s ease;
+        }
+        .badge-card:hover {
+            transform: scale(1.05);
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .level-progress {
+            background: linear-gradient(90deg, #1E3A8A 0%, #F97316 50%, #059669 100%);
+        }
+        .mobile-overlay {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .mobile-overlay.active {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 30;
+            }
+        }

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service | Setu | Citizen Grievance Redressal Portal</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins (for headings) & Inter (for body) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style/terms.css">
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="../js/tailwindConfig.js"></script>
+</head>
+<body class="bg-light-bg text-dark-text font-sans antialiased">
+    <div class="gtranslate_wrapper hidden"></div>
+<script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"languages":["en","hi","mr","pa","gu","ta","te","ml","kn","bn"],"wrapper_selector":".gtranslate_wrapper","horizontal_position":"left","vertical_position":"bottom"}</script>
+<script src="../js/lang.js" defer></script>
+<link rel="stylesheet" href="../style/lang.css">
+    <!-- Top Bar -->
+    <div class="tricolor-bar h-1.5"></div>
+    <div class="bg-primary-blue text-white text-xs py-1">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <span>For India</span>
+            <span id="datetime">Monday, 6 October 2025 | 6:28 PM IST</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-50 shadow-md border-b border-gray-200">
+        <div class="container mx-auto px-6 py-3">
+            <nav class="flex justify-between items-center">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <img src="https://res.cloudinary.com/dn6hkqmrt/image/upload/v1763747450/SETU_LOGO_wwapwe.jpg" alt="setu logo" class="h-12">
+                    <div>
+                        <span class="text-2xl font-heading font-extrabold text-primary-blue">सेतु Setu</span>
+                        <p class="text-xs text-gray-500 font-semibold tracking-wide">Citizen Grievance Redressal Portal</p>
+                    </div>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <button class="px-6 py-2 bg-primary-blue text-white font-medium rounded-lg hover:bg-blue-800 transition flex items-center" onclick ="goBack()">
+                        ⬅ Back
+                    </button>
+                </div>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg border-t border-gray-200">
+            <ul class="flex flex-col items-center space-y-4 py-4">
+                <li><a href="login.html" class="w-11/12 text-center mt-2 px-5 py-2.5 font-bold text-primary-blue bg-blue-100 rounded-lg hover:bg-blue-200">Citizen Login</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="pt-16 pb-10 md:pt-20 md:pb-14 bg-light-blue-bg">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="font-heading text-4xl md:text-5xl font-extrabold text-dark-text leading-tight mb-4">Terms of Service</h1>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Please read these terms carefully before using the Setu Citizen Grievance Redressal Portal</p>
+                <p class="text-sm text-gray-500 mt-2">Last updated: [Add Date]</p>
+                
+                <!-- PDF Download Button -->
+                <div class="mt-6">
+                    <button id="download-pdf" class="px-6 py-3 bg-primary-blue text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 mx-auto">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Download as PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer Banner -->
+        <section class="py-4 bg-amber-50 border-b border-amber-200">
+            <div class="container mx-auto px-6">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1 mr-3">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-amber-800">Disclaimer</h3>
+                        <p class="text-amber-700 text-sm">This website is a student academic project created for educational purposes only. It is not an official Government of India website, and no real government departments, services, or grievance systems are connected to this portal. All data, processes, and representations are purely simulated for project use.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terms Content -->
+        <section class="py-12 bg-white">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Table of Contents Sidebar -->
+                    <div class="lg:w-1/4">
+                        <div class="toc-sidebar bg-light-blue-bg rounded-lg p-6 card-glow">
+                            <h3 class="font-heading font-bold text-primary-blue text-lg mb-4">Contents</h3>
+                            <nav>
+                                <a href="#acceptance" class="toc-link">Acceptance of Terms</a>
+                                <a href="#description" class="toc-link">Service Description</a>  
+                                <a href="#eligibility" class="toc-link">Eligibility</a>
+                                <a href="#registration" class="toc-link">Registration</a>
+                                <a href="#user-responsibilities" class="toc-link">User Responsibilities</a>
+                                <a href="#grievance-process" class="toc-link">Grievance Process</a>
+                                <a href="#intellectual-property" class="toc-link">Intellectual Property</a>
+                                <a href="#privacy" class="toc-link">Privacy</a>
+                                <a href="#limitation" class="toc-link">Limitation of Liability</a>
+                                <a href="#termination" class="toc-link">Termination</a>
+                                <a href="#governing-law" class="toc-link">Governing Law</a>
+                                <a href="#changes" class="toc-link">Changes to Terms</a>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="lg:w-3/4">
+                        <div class="bg-white rounded-lg p-8 card-glow" id="terms-content">
+                            <div class="content-section">
+                                <h2 id="acceptance">1. Acceptance of Terms</h2>
+                                <p>By accessing or using the Setu Citizen Grievance Redressal Portal ("the Portal"), you agree to comply with these Terms of Service and all applicable laws. If you do not agree with any part of the Terms, you must not use the Portal.</p>
+                                <p>All content available on this Portal is protected by applicable copyright and trademark laws.</p>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="description">2. Service Description</h2>
+                                <p>The Setu Portal (created as part of an academic minor project) is designed to simulate a citizen grievance redressal system. It allows users to:</p>
+                                <ul class="list-disc pl-6">
+                                    <li>Register and submit grievances</li>
+                                    <li>Track submitted grievances</li>
+                                    <li>Receive updates on grievance status</li>
+                                    <li>Access information related to public services (for demonstration purposes)</li>
+                                </ul>
+                                <p>This system is a project prototype and does not represent the actual Government of India Setu platform.</p>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="eligibility">3. Eligibility</h2>
+                                <p>To use this Portal, you must:</p>
+                                <ul class="list-disc pl-6">
+                                    <li>Be at least 18 years old</li>
+                                    <li>Provide a valid email address and mobile number</li>
+                                    <li>Provide accurate and complete information</li>
+                                    <li>Use the Portal for educational and demonstration purposes only</li>
+                                </ul>
+                                <p>Government officials accessing this prototype must be authorized for academic review only.</p>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="registration">4. Registration and Account Security</h2>
+                                <p>When registering, you agree to:</p>
+                                <ul class="list-disc pl-6">
+                                    <li>Provide accurate and updated information</li>
+                                    <li>Maintain confidentiality of your password</li>
+                                    <li>Immediately notify us of any unauthorized account access</li>
+                                    <li>Accept responsibility for all actions performed under your account</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="user-responsibilities">5. User Responsibilities</h2>
+                                <p>By using the Portal, you agree not to:</p>
+                                <ul class="list-disc pl-6">
+                                    <li>Submit false, misleading, or inappropriate grievances</li>
+                                    <li>Use the Portal for harassment or unlawful activities</li>
+                                    <li>Impersonate anyone</li>
+                                    <li>Attempt to hack, disrupt, or misuse the system</li>
+                                    <li>Upload harmful files or code</li>
+                                </ul>
+                                <p>Violation of these rules may result in account suspension or removal.</p>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="grievance-process">6. Grievance Submission and Resolution Process</h2>
+                                <h3>6.1 Grievance Submission</h3>
+                                <p>When submitting a grievance, you must:</p>
+                                <ul class="list-disc pl-6">
+                                    <li>Provide true and complete details</li>
+                                    <li>Choose the correct category and department</li>
+                                    <li>Upload relevant documents (if required)</li>
+                                </ul>
+
+                                <h3>6.2 Grievance Resolution</h3>
+                                <p>As this is a student project prototype:</p>
+                                <ul class="list-disc pl-6">
+                                    <li>No real government departments are involved</li>
+                                    <li>No guarantee of grievance resolution is provided</li>
+                                    <li>Response timelines are simulated for demonstration only</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="intellectual-property">7. Intellectual Property</h2>
+                                <p>All content, design, and features of this Portal (created as part of the minor project) are protected. Users may not copy, redistribute, or modify any part of the Portal without permission.</p>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="privacy">8. Privacy</h2>
+                                <p>User information is collected solely for demonstration purposes. Please review our Privacy Policy for details on how data is stored and used within the academic context.</p>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="limitation">9. Limitation of Liability</h2>
+                                <p>This Portal is an academic prototype. We are not liable for:</p>
+                                <ul class="list-disc pl-6">
+                                    <li>Any loss resulting from the use or inability to use the Portal</li>
+                                    <li>Unauthorized access or data alteration</li>
+                                    <li>Errors or interruptions in service</li>
+                                    <li>Any decisions made based on the simulated outputs</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="termination">10. Termination</h2>
+                                <p>We may suspend or terminate accounts at our discretion if Terms are violated. Users may stop using the Portal at any time to terminate their participation.</p>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="governing-law">11. Governing Law</h2>
+                                <p>These Terms are governed by the laws of India. Any disputes will fall under the jurisdiction of courts in New Delhi, India.</p>
+                            </div>
+
+                            <div class="content-section">
+                                <h2 id="changes">12. Changes to Terms</h2>
+                                <p>We may update these Terms at any time. Continued use of the Portal after changes indicates your acceptance of the updated Terms.</p>
+                            </div>
+
+                            <div class="mt-8 p-6 bg-light-blue-bg rounded-lg">
+                                <p class="text-sm text-gray-600">By using the Setu Portal, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Back to Top Button -->
+    <div id="back-to-top" class="back-to-top hidden">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+    </div>
+
+<!-- Simplified Enhanced Footer -->
+<footer class="bg-primary-blue text-white">
+    <div class="container mx-auto px-6 pt-12 pb-8">
+        <!-- Main Footer Content -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+            <!-- Brand & Description -->
+            <div class="text-center md:text-left">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-4 mb-6">
+                    <img src="https://res.cloudinary.com/dn6hkqmrt/image/upload/v1763748052/SETU_LOGO-removebg_kxwnmb.png" alt="setu logo" class="h-16 invert">
+                    <div>
+                        <h3 class="font-heading font-bold text-xl mb-2">Setu Grievance Redressal Portal</h3>
+                        <p class="text-blue-200 text-sm">Academic Project Prototype</p>
+                    </div>
+                </div>
+                <p class="text-blue-200 text-sm mb-6 leading-relaxed">A student project simulating a citizen grievance redressal system for educational purposes.</p>
+                
+                <div class="flex space-x-4 justify-center md:justify-start">
+                    <a href="https://www.facebook.com/" class="h-8 w-8 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition" aria-label="Facebook">
+                        <i class="fab fa-facebook-f text-sm"></i>
+                    </a>
+                    <a href="https://x.com/" class="h-8 w-8 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition" aria-label="Twitter">
+                        <i class="fab fa-twitter text-sm"></i>
+                    </a>
+                    <a href="https://www.youtube.com/youtube" class="h-8 w-8 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition" aria-label="YouTube">
+                        <i class="fab fa-youtube text-sm"></i>
+                    </a>
+                    <a href="https://www.instagram.com/accounts/login/" class="h-8 w-8 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition" aria-label="Instagram">
+                        <i class="fab fa-instagram text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact & Help -->
+            <div>
+                <h4 class="font-heading font-bold text-lg mb-4 border-b border-blue-700 pb-2">Contact & Help</h4>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 bg-blue-800 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-phone-alt text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-blue-200 text-sm font-medium">Project Support</p>
+                            <p class="text-white font-medium">Not Available</p>
+                            <p class="text-blue-300 text-xs">Academic Project Only</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 bg-blue-800 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-envelope text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-blue-200 text-sm font-medium">Email Support</p>
+                            <p class="text-white font-medium">Not Available</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 bg-blue-800 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-info-circle text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-blue-200 text-sm font-medium">Note</p>
+                            <p class="text-white font-medium">Academic Project Only</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Information -->
+            <div>
+                <h4 class="font-heading font-bold text-lg mb-4 border-b border-blue-700 pb-2">Project Information</h4>
+                <div class="space-y-3">
+                    <div class="flex items-center p-3 bg-blue-800 rounded-lg">
+                        <i class="fas fa-graduation-cap text-white mr-3"></i>
+                        <span class="text-sm">Academic Project</span>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-blue-800 rounded-lg">
+                        <i class="fas fa-laptop-code text-white mr-3"></i>
+                        <span class="text-sm">Student Project Prototype</span>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-blue-800 rounded-lg">
+                        <i class="fas fa-exclamation-triangle text-white mr-3"></i>
+                        <span class="text-sm">Not an Official Portal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Links Section -->
+        <div class="border-t border-blue-700 pt-8 mb-8">
+            <h4 class="font-heading font-bold text-lg mb-6 text-center">Important Links</h4>
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
+                <a href="privacy-policy.html" class="text-blue-200 hover:text-white transition text-sm py-2">Privacy Policy</a>
+                <a href="term.html" class="text-blue-200 hover:text-white transition text-sm py-2">Terms of Service</a>
+                <a href="copy-right.html" class="text-blue-200 hover:text-white transition text-sm py-2">Copyright Policy</a>
+                <a href="help-support.html" class="text-blue-200 hover:text-white transition text-sm py-2">Help & Support</a>
+                <a href="how-to-submit.html" class="text-blue-200 hover:text-white transition text-sm py-2">Submit Grievance</a>
+                <a href="guidelines.html" class="text-blue-200 hover:text-white transition text-sm py-2">Guidelines</a>
+            </div>
+        </div>
+
+        <!-- Copyright & Info Section -->
+        <div class="border-t border-blue-700 pt-6">
+            <div class="text-center">
+                <p class="text-blue-300 text-sm">
+                    Designed, Developed and Hosted by 
+                    <span class="font-semibold text-white">Team SETU</span>
+                </p>
+                <p class="text-blue-300 text-sm mt-1">
+                    &copy; 2025 Setu Grievance Redressal Portal (Academic Project). All Rights Reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="../js/terms.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<%@ page import="model.entity.Citizen" %>
+<%@ page import="java.net.URLEncoder" %>
+<%
+    // Prevent browser caching
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setDateHeader("Expires", 0); // Proxies
+
+ // Check for existing session and required attributes
+    HttpSession csession = request.getSession(false);
+    
+    // *** CRITICAL CHECK: Look for the Citizen object in the session ***
+    if (csession == null || csession.getAttribute("citizen") == null) {
+        String errorMsg = URLEncoder.encode("Session expired or unauthorized. Please log in.", "UTF-8");
+        response.sendRedirect(request.getContextPath() + "/citizen/login.jsp?error=" + errorMsg);
+        return;
+    }
+
+    // Retrieve and cast the Citizen object for easy access
+    Citizen citizen = (Citizen) csession.getAttribute("citizen");
+    String name = citizen.getFullName();
+    String [] input = name.split(" ");
+    String profileName = "";
+    for (String part : input) {
+    	profileName += part.charAt(0);
+    }
+    
+%>
+    

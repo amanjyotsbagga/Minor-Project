@@ -1,0 +1,61 @@
+.tricolor-bar {
+            background: linear-gradient(to right, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%);
+        }
+        .card-glow {
+            box-shadow: 0 10px 30px -5px rgba(30, 58, 138, 0.1);
+        }
+        .form-input {
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: #EFF6FF;
+            color: #1E3A8A;
+            border-right: 4px solid #1E3A8A;
+        }
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            width: 0%;
+        }
+        .otp-input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            margin: 0 5px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+        }
+        .otp-input:focus {
+            outline: none;
+            border-color: #1E3A8A;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+        .status-verified {
+            background-color: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FCD34D;
+        }

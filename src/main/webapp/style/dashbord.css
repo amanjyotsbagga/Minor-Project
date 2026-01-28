@@ -1,0 +1,29 @@
+ .tricolor-bar {
+            background: linear-gradient(to right, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%);
+        }
+        .card-glow {
+            box-shadow: 0 10px 30px -5px rgba(30, 58, 138, 0.1);
+        }
+        .stats-card {
+            transition: all 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        .grievance-item {
+            transition: all 0.3s ease;
+        }
+        .grievance-item:hover {
+            background-color: #f8fafc;
+        }
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }

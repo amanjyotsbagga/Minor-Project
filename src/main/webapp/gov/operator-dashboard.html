@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Admin Dashboard - Setu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --light-gray: #f5f7fa;
+            --light-green: #d5f5e3;
+            --logo-hover: #c8f7dc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            transition: all 0.3s;
+            overflow: hidden;
+            background: white;
+            padding: 5px;
+        }
+
+        .logo-container:hover {
+            background-color: var(--logo-hover);
+            transform: scale(1.05);
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            padding: 12px 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-menu li:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu li.active {
+            background: var(--secondary);
+            border-left: 4px solid white;
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card:hover .stat-icon {
+            background-color: var(--light-green);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .pending { background-color: #fff3cd; color: #856404; }
+        .in-progress { background-color: #d1ecf1; color: #0c5460; }
+        .completed { background-color: #d4edda; color: #155724; }
+        .overdue { background-color: #f8d7da; color: #721c24; }
+
+        /* Dashboard Sections */
+        .dashboard-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section-header h2 {
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .section-header a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .section-header a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* Task Table */
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .task-table th, .task-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .task-table th {
+            background-color: var(--light-gray);
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .task-table tr {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .task-table tr:hover {
+            background-color: #f9f9f9;
+            transform: scale(1.01);
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending { background-color: #fff3cd; color: #856404; }
+        .status-in-progress { background-color: #d1ecf1; color: #0c5460; }
+        .status-completed { background-color: #d4edda; color: #155724; }
+        .status-overdue { background-color: #f8d7da; color: #721c24; }
+        .status-unassigned { background-color: #e2e3e5; color: #383d41; }
+
+        /* Charts Container */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .chart {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            margin-top: 20px;
+        }
+
+        /* Team Members */
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .team-member:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .team-member img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .member-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .member-info p {
+            font-size: 0.8rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h2 {
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .close-btn:hover {
+            color: var(--danger);
+        }
+
+        /* Task Details */
+        .task-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .task-info, .task-assignment {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .task-info h3, .task-assignment h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .task-info p, .task-assignment p {
+            margin-bottom: 8px;
+        }
+
+        .proof-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        /* Worker Details */
+        .worker-details {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .worker-profile {
+            text-align: center;
+        }
+
+        .worker-profile img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .worker-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .worker-stat {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .worker-stat h4 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        /* Task List */
+        .task-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .task-item:hover {
+            background: var(--light-gray);
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .task-item-id {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .task-item-desc {
+            color: var(--gray);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+        }
+
+        .btn-info {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #1a252f;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Unassigned Tasks */
+        .unassigned-tasks {
+            margin-top: 20px;
+        }
+
+        /* FAQ Items */
+        .faq-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .faq-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .task-details, .worker-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-members {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/1200px-Emblem_of_India.svg.png" alt="India Emblem">
+                </div>
+                <h2>Setu सेतु</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                    <li data-section="task-management"><i class="fas fa-tasks"></i> Task Management</li>
+                    <li data-section="analytics"><i class="fas fa-chart-bar"></i> Analytics</li>
+                    <li data-section="team-management"><i class="fas fa-users"></i> Team Management</li>
+                    <li data-section="settings"><i class="fas fa-cog"></i> Settings</li>
+                    <li data-section="help"><i class="fas fa-question-circle"></i> Help & Support</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Operator Dashboard</h1>
+                <div class="user-info">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="User Avatar">
+                    <div>
+                        <h3>Sarah Johnson</h3>
+                        <p>Sanitation Department Operator</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <!-- Stats Cards -->
+                <div class="stats-cards">
+                    <div class="stat-card" data-filter="pending">
+                        <div class="stat-icon pending">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>42</h3>
+                            <p>Pending Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-filter="in-progress">
+                        <div class="stat-icon in-progress">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>18</h3>
+                            <p>In Progress</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-filter="completed">
+                        <div class="stat-icon completed">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>156</h3>
+                            <p>Completed Today</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-filter="overdue">
+                        <div class="stat-icon overdue">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>7</h3>
+                            <p>Overdue Tasks</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Tasks Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 id="tasks-heading">Recent Tasks</h2>
+                        <a id="view-all-tasks">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <table class="task-table">
+                        <thead>
+                            <tr>
+                                <th>Task ID</th>
+                                <th>Description</th>
+                                <th>Assigned To</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>SLA</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tasks-table-body">
+                            <!-- Tasks will be loaded here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Charts and Team Section -->
+                <div class="charts-container">
+                    <!-- Performance Chart -->
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Department Performance</h2>
+                            <a id="view-performance">View Details <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="chart">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Team Members -->
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Team Members</h2>
+                            <a id="view-team">Manage Team <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="team-members">
+                            <div class="team-member" data-worker="1">
+                                <img src="https://i.pravatar.cc/150?img=1" alt="Team Member">
+                                <div class="member-info">
+                                    <h4>John Doe</h4>
+                                    <p>Operator</p>
+                                </div>
+                            </div>
+                            <div class="team-member" data-worker="2">
+                                <img src="https://i.pravatar.cc/150?img=2" alt="Team Member">
+                                <div class="member-info">
+                                    <h4>Robert Brown</h4>
+                                    <p>Worker</p>
+                                </div>
+                            </div>
+                            <div class="team-member" data-worker="3">
+                                <img src="https://i.pravatar.cc/150?img=3" alt="Team Member">
+                                <div class="member-info">
+                                    <h4>Maria Garcia</h4>
+                                    <p>Worker</p>
+                                </div>
+                            </div>
+                            <div class="team-member" data-worker="4">
+                                <img src="https://i.pravatar.cc/150?img=4" alt="Team Member">
+                                <div class="member-info">
+                                    <h4>James Wilson</h4>
+                                    <p>Worker</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLA Compliance Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>SLA Compliance by Category</h2>
+                        <a id="view-sla">View Full Report <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="chart">
+                        <canvas id="slaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Management Section -->
+            <div id="task-management" class="content-section">
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Task Management</h2>
+                        <div>
+                            <button class="btn btn-primary" id="newTaskBtn">New Task</button>
+                            <button class="btn btn-info" id="refreshTasksBtn">
+                                <i class="fas fa-sync-alt"></i> Refresh Tasks
+                            </button>
+                        </div>
+                    </div>
+                    <div class="unassigned-tasks">
+                        <h3>Unassigned Tasks</h3>
+                        <table class="task-table">
+                            <thead>
+                                <tr>
+                                    <th>Task ID</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="unassigned-tasks-table">
+                                <!-- Unassigned tasks will be loaded here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="content-section">
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Analytics Overview</h2>
+                    </div>
+                    <div class="charts-container">
+                        <div class="chart">
+                            <h3>Task Completion Rate</h3>
+                            <canvas id="completionRateChart"></canvas>
+                        </div>
+                        <div class="chart">
+                            <h3>Worker Performance</h3>
+                            <canvas id="workerPerformanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Management Section -->
+            <div id="team-management" class="content-section">
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Team Management</h2>
+                        <button class="btn btn-primary">Add Team Member</button>
+                    </div>
+                    <div class="team-members">
+                        <div class="team-member" data-worker="1">
+                            <img src="https://i.pravatar.cc/150?img=1" alt="Team Member">
+                            <div class="member-info">
+                                <h4>John Doe</h4>
+                                <p>Operator</p>
+                                <p>Tasks Completed: 342</p>
+                                <p>Rating: 4.7/5</p>
+                            </div>
+                        </div>
+                        <div class="team-member" data-worker="2">
+                            <img src="https://i.pravatar.cc/150?img=2" alt="Team Member">
+                            <div class="member-info">
+                                <h4>Robert Brown</h4>
+                                <p>Worker</p>
+                                <p>Tasks Completed: 289</p>
+                                <p>Rating: 4.5/5</p>
+                            </div>
+                        </div>
+                        <div class="team-member" data-worker="3">
+                            <img src="https://i.pravatar.cc/150?img=3" alt="Team Member">
+                            <div class="member-info">
+                                <h4>Maria Garcia</h4>
+                                <p>Worker</p>
+                                <p>Tasks Completed: 198</p>
+                                <p>Rating: 4.3/5</p>
+                            </div>
+                        </div>
+                        <div class="team-member" data-worker="4">
+                            <img src="https://i.pravatar.cc/150?img=4" alt="Team Member">
+                            <div class="member-info">
+                                <h4>James Wilson</h4>
+                                <p>Worker</p>
+                                <p>Tasks Completed: 415</p>
+                                <p>Rating: 4.8/5</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="content-section">
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Settings</h2>
+                    </div>
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label for="departmentName">Department Name</label>
+                            <input type="text" id="departmentName" class="form-control" value="Sanitation Department">
+                        </div>
+                        <div class="form-group">
+                            <label for="slaSettings">Default SLA (Hours)</label>
+                            <input type="number" id="slaSettings" class="form-control" value="4">
+                        </div>
+                        <div class="form-group">
+                            <label for="notificationSettings">Email Notifications</label>
+                            <select id="notificationSettings" class="form-control">
+                                <option value="enabled" selected>Enabled</option>
+                                <option value="disabled">Disabled</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Save Settings</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help & Support Section -->
+            <div id="help" class="content-section">
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Help & Support</h2>
+                    </div>
+                    <h3>Frequently Asked Questions</h3>
+                    <div class="faq-item">
+                        <h4>How do I assign a task to a worker?</h4>
+                        <p>Go to the Task Management section, find the unassigned task, and click the "Assign" button next to it.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>How can I view worker performance?</h4>
+                        <p>Navigate to the Analytics section to see detailed performance metrics for each worker.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What is SLA compliance?</h4>
+                        <p>SLA (Service Level Agreement) compliance measures how well tasks are completed within their designated timeframes.</p>
+                    </div>
+                    <h3>Contact Support</h3>
+                    <p>If you need further assistance, please contact our support team at <strong>support@setu.gov</strong> or call <strong>1-800-SETU-HELP</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Modals -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Task Details</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div id="taskModalContent">
+                <!-- Task details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="workerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Worker Details</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div id="workerModalContent">
+                <!-- Worker details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="tasksModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>All Tasks</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div>
+                <button class="btn btn-primary" id="newTaskBtnModal">New Task</button>
+                <div class="task-list" id="allTasksList">
+                    <!-- All tasks will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="newTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Assign New Task</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div>
+                <form id="newTaskForm">
+                    <div class="form-group">
+                        <label for="taskDescription">Task Description</label>
+                        <input type="text" id="taskDescription" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskCategory">Category</label>
+                        <select id="taskCategory" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="sanitation">Sanitation</option>
+                            <option value="drainage">Drainage</option>
+                            <option value="street-cleaning">Street Cleaning</option>
+                            <option value="public-toilets">Public Toilets</option>
+                            <option value="waste-collection">Waste Collection</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority" class="form-control" required>
+                            <option value="">Select Priority</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskWorker">Assign To</label>
+                        <select id="taskWorker" class="form-control" required>
+                            <option value="">Select Worker</option>
+                            <option value="1">John Doe</option>
+                            <option value="2">Robert Brown</option>
+                            <option value="3">Maria Garcia</option>
+                            <option value="4">James Wilson</option>
+                            <option value="5">Lisa Taylor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskSLA">SLA (Hours)</label>
+                        <input type="number" id="taskSLA" class="form-control" min="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Assign Task</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="assignTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Assign Task</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div>
+                <div id="assignTaskInfo"></div>
+                <div class="form-group">
+                    <label for="assignWorker">Assign To</label>
+                    <select id="assignWorker" class="form-control" required>
+                        <option value="">Select Worker</option>
+                        <option value="1">John Doe</option>
+                        <option value="2">Robert Brown</option>
+                        <option value="3">Maria Garcia</option>
+                        <option value="4">James Wilson</option>
+                        <option value="5">Lisa Taylor</option>
+                    </select>
+                </div>
+                <button class="btn btn-success" id="confirmAssignBtn">Assign</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const workers = {
+            1: {
+                id: 1,
+                name: "John Doe",
+                role: "Operator",
+                email: "john.doe@setu.gov",
+                phone: "+1 234 567 8901",
+                joinDate: "2022-03-15",
+                avatar: "https://i.pravatar.cc/150?img=1",
+                tasksCompleted: 342,
+                tasksInProgress: 3,
+                rating: 4.7
+            },
+            2: {
+                id: 2,
+                name: "Robert Brown",
+                role: "Worker",
+                email: "robert.brown@setu.gov",
+                phone: "+1 234 567 8902",
+                joinDate: "2022-05-20",
+                avatar: "https://i.pravatar.cc/150?img=2",
+                tasksCompleted: 289,
+                tasksInProgress: 2,
+                rating: 4.5
+            },
+            3: {
+                id: 3,
+                name: "Maria Garcia",
+                role: "Worker",
+                email: "maria.garcia@setu.gov",
+                phone: "+1 234 567 8903",
+                joinDate: "2022-07-10",
+                avatar: "https://i.pravatar.cc/150?img=3",
+                tasksCompleted: 198,
+                tasksInProgress: 1,
+                rating: 4.3
+            },
+            4: {
+                id: 4,
+                name: "James Wilson",
+                role: "Worker",
+                email: "james.wilson@setu.gov",
+                phone: "+1 234 567 8904",
+                joinDate: "2022-01-05",
+                avatar: "https://i.pravatar.cc/150?img=4",
+                tasksCompleted: 415,
+                tasksInProgress: 0,
+                rating: 4.8
+            },
+            5: {
+                id: 5,
+                name: "Lisa Taylor",
+                role: "Worker",
+                email: "lisa.taylor@setu.gov",
+                phone: "+1 234 567 8905",
+                joinDate: "2022-09-12",
+                avatar: "https://i.pravatar.cc/150?img=5",
+                tasksCompleted: 156,
+                tasksInProgress: 2,
+                rating: 4.4
+            }
+        };
+
+        let tasks = {
+            "T-1042": {
+                id: "T-1042",
+                description: "Garbage accumulation at Central Market",
+                category: "Sanitation",
+                priority: "High",
+                status: "Overdue",
+                assignedTo: 1,
+                createdAt: "2023-05-10 08:30:00",
+                dueDate: "2023-05-10 12:00:00",
+                completedAt: null,
+                location: "Central Market, Downtown",
+                reporter: "Citizen App",
+                proofImage: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            "T-1041": {
+                id: "T-1041",
+                description: "Drainage blockage on Main Street",
+                category: "Drainage",
+                priority: "High",
+                status: "In Progress",
+                assignedTo: 2,
+                createdAt: "2023-05-10 09:15:00",
+                dueDate: "2023-05-10 14:00:00",
+                completedAt: null,
+                location: "Main Street, City Center",
+                reporter: "Citizen App",
+                proofImage: null
+            },
+            "T-1040": {
+                id: "T-1040",
+                description: "Street cleaning near City Park",
+                category: "Street Cleaning",
+                priority: "Medium",
+                status: "Pending",
+                assignedTo: 3,
+                createdAt: "2023-05-10 10:00:00",
+                dueDate: "2023-05-10 16:00:00",
+                completedAt: null,
+                location: "City Park Area",
+                reporter: "Operator",
+                proofImage: null
+            },
+            "T-1039": {
+                id: "T-1039",
+                description: "Public toilet maintenance",
+                category: "Public Toilets",
+                priority: "Medium",
+                status: "Completed",
+                assignedTo: 4,
+                createdAt: "2023-05-10 07:45:00",
+                dueDate: "2023-05-10 12:00:00",
+                completedAt: "2023-05-10 11:30:00",
+                location: "Public Toilet #23, West End",
+                reporter: "Citizen App",
+                proofImage: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            "T-1038": {
+                id: "T-1038",
+                description: "Waste collection at Residential Area",
+                category: "Waste Collection",
+                priority: "Low",
+                status: "Completed",
+                assignedTo: 5,
+                createdAt: "2023-05-10 06:30:00",
+                dueDate: "2023-05-10 10:00:00",
+                completedAt: "2023-05-10 09:45:00",
+                location: "Residential Area, North District",
+                reporter: "Scheduled Task",
+                proofImage: "https://images.unsplash.com/photo-1571624436279-b272aff752b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            "T-1045": {
+                id: "T-1045",
+                description: "Garbage bin replacement at Park Street",
+                category: "Sanitation",
+                priority: "Medium",
+                status: "Unassigned",
+                assignedTo: null,
+                createdAt: "2023-05-10 11:00:00",
+                dueDate: "2023-05-10 18:00:00",
+                completedAt: null,
+                location: "Park Street",
+                reporter: "Citizen App",
+                proofImage: null
+            },
+            "T-1044": {
+                id: "T-1044",
+                description: "Street light cleaning near School",
+                category: "Street Cleaning",
+                priority: "Low",
+                status: "Unassigned",
+                assignedTo: null,
+                createdAt: "2023-05-10 10:30:00",
+                dueDate: "2023-05-11 10:00:00",
+                completedAt: null,
+                location: "School Area",
+                reporter: "Operator",
+                proofImage: null
+            },
+            "T-1043": {
+                id: "T-1043",
+                description: "Drain inspection at Commercial Area",
+                category: "Drainage",
+                priority: "High",
+                status: "Unassigned",
+                assignedTo: null,
+                createdAt: "2023-05-10 09:45:00",
+                dueDate: "2023-05-10 15:00:00",
+                completedAt: null,
+                location: "Commercial Area",
+                reporter: "Citizen App",
+                proofImage: null
+            }
+        };
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts
+            initCharts();
+            
+            // Add event listeners
+            setupEventListeners();
+            
+            // Load initial tasks
+            loadTasks();
+            loadUnassignedTasks();
+            
+            // Simulate real-time updates for stats
+            setInterval(updateStats, 30000);
+        });
+
+        // Initialize charts
+        function initCharts() {
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            const performanceChart = new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Tasks Completed',
+                        data: [120, 150, 180, 140, 200, 170],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'SLA Compliance %',
+                        data: [85, 88, 92, 87, 90, 94],
+                        borderColor: '#2ecc71',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Department Performance Trends'
+                        }
+                    }
+                }
+            });
+
+            // SLA Compliance Chart
+            const slaCtx = document.getElementById('slaChart').getContext('2d');
+            const slaChart = new Chart(slaCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sanitation', 'Drainage', 'Street Cleaning', 'Public Toilets', 'Waste Collection'],
+                    datasets: [{
+                        label: 'SLA Compliance %',
+                        data: [92, 85, 96, 88, 94],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(230, 126, 34, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgb(52, 152, 219)',
+                            'rgb(46, 204, 113)',
+                            'rgb(155, 89, 182)',
+                            'rgb(241, 196, 15)',
+                            'rgb(230, 126, 34)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'SLA Compliance by Category'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Completion Rate Chart
+            const completionCtx = document.getElementById('completionRateChart').getContext('2d');
+            const completionChart = new Chart(completionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'In Progress', 'Pending', 'Overdue'],
+                    datasets: [{
+                        data: [65, 15, 15, 5],
+                        backgroundColor: [
+                            '#2ecc71',
+                            '#3498db',
+                            '#f39c12',
+                            '#e74c3c'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+
+            // Worker Performance Chart - Fixed to show bars going upward
+            const workerCtx = document.getElementById('workerPerformanceChart').getContext('2d');
+            const workerChart = new Chart(workerCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['John Doe', 'Robert Brown', 'Maria Garcia', 'James Wilson', 'Lisa Taylor'],
+                    datasets: [{
+                        label: 'Tasks Completed',
+                        data: [342, 289, 198, 415, 156],
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgb(52, 152, 219)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Tasks Completed'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Workers'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Sidebar navigation
+            const menuItems = document.querySelectorAll('.sidebar-menu li');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    // Remove active class from all items
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Hide all content sections
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show the selected section
+                    document.getElementById(section).classList.add('active');
+                });
+            });
+
+            // Stats cards filtering
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    showFilteredTasks(filter);
+                });
+            });
+
+            // Task rows - show task details
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.task-table tr[data-task]')) {
+                    const taskId = e.target.closest('tr').getAttribute('data-task');
+                    showTaskDetails(taskId);
+                }
+            });
+
+            // Worker names in task table - show worker details
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.task-table td[data-worker]')) {
+                    e.stopPropagation();
+                    const workerId = e.target.closest('td').getAttribute('data-worker');
+                    showWorkerDetails(workerId);
+                }
+            });
+
+            // Team members - show worker details
+            const teamMembers = document.querySelectorAll('.team-member');
+            teamMembers.forEach(member => {
+                member.addEventListener('click', function() {
+                    const workerId = this.getAttribute('data-worker');
+                    showWorkerDetails(workerId);
+                });
+            });
+
+            // View all tasks
+            document.getElementById('view-all-tasks').addEventListener('click', showAllTasks);
+            
+            // New task buttons
+            document.getElementById('newTaskBtn').addEventListener('click', showNewTaskForm);
+            document.getElementById('newTaskBtnModal').addEventListener('click', function() {
+                document.getElementById('tasksModal').style.display = 'none';
+                showNewTaskForm();
+            });
+            
+            // New task form submission
+            document.getElementById('newTaskForm').addEventListener('submit', assignNewTask);
+            
+            // Assign task buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('assign-task-btn')) {
+                    const taskId = e.target.getAttribute('data-task');
+                    showAssignTaskModal(taskId);
+                }
+            });
+            
+            // Confirm assign button
+            document.getElementById('confirmAssignBtn').addEventListener('click', confirmAssignTask);
+            
+            // Settings form submission
+            document.getElementById('settingsForm').addEventListener('submit', saveSettings);
+            
+            // Refresh tasks button
+            document.getElementById('refreshTasksBtn').addEventListener('click', refreshTasks);
+            
+            // Modal close buttons
+            const closeButtons = document.querySelectorAll('.close-btn');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    modal.style.display = 'none';
+                });
+            });
+            
+            // Close modal when clicking outside
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Load tasks into the table
+        function loadTasks(filter = null) {
+            const tasksTableBody = document.getElementById('tasks-table-body');
+            tasksTableBody.innerHTML = '';
+            
+            let filteredTasks = Object.values(tasks);
+            
+            if (filter) {
+                filteredTasks = filteredTasks.filter(task => {
+                    if (filter === 'pending') return task.status === 'Pending';
+                    if (filter === 'in-progress') return task.status === 'In Progress';
+                    if (filter === 'completed') return task.status === 'Completed';
+                    if (filter === 'overdue') return task.status === 'Overdue';
+                    return true;
+                });
+            }
+            
+            filteredTasks.forEach(task => {
+                const worker = task.assignedTo ? workers[task.assignedTo] : null;
+                
+                // Calculate SLA status
+                let slaStatus = '';
+                if (task.status === 'Completed') {
+                    slaStatus = 'Completed on time';
+                } else if (task.status === 'Overdue') {
+                    slaStatus = '2 hrs overdue';
+                } else {
+                    slaStatus = 'Due in 3 hrs';
+                }
+                
+                const row = document.createElement('tr');
+                row.setAttribute('data-task', task.id);
+                row.innerHTML = `
+                    <td>${task.id}</td>
+                    <td>${task.description}</td>
+                    <td data-worker="${task.assignedTo || ''}">${worker ? worker.name : 'Unassigned'}</td>
+                    <td>${task.priority}</td>
+                    <td><span class="status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span></td>
+                    <td>${slaStatus}</td>
+                `;
+                
+                tasksTableBody.appendChild(row);
+            });
+        }
+
+        // Load unassigned tasks
+        function loadUnassignedTasks() {
+            const unassignedTable = document.getElementById('unassigned-tasks-table');
+            unassignedTable.innerHTML = '';
+            
+            const unassignedTasks = Object.values(tasks).filter(task => task.status === 'Unassigned');
+            
+            unassignedTasks.forEach(task => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-task', task.id);
+                row.innerHTML = `
+                    <td>${task.id}</td>
+                    <td>${task.description}</td>
+                    <td>${task.category}</td>
+                    <td>${task.priority}</td>
+                    <td><span class="status status-unassigned">Unassigned</span></td>
+                    <td><button class="btn btn-primary assign-task-btn" data-task="${task.id}">Assign</button></td>
+                `;
+                
+                unassignedTable.appendChild(row);
+            });
+        }
+
+        // Show task details in modal
+        function showTaskDetails(taskId) {
+            const task = tasks[taskId];
+            const worker = task.assignedTo ? workers[task.assignedTo] : null;
+            
+            const modalContent = document.getElementById('taskModalContent');
+            modalContent.innerHTML = `
+                <div class="task-details">
+                    <div class="task-info">
+                        <h3>Task Information</h3>
+                        <p><strong>ID:</strong> ${task.id}</p>
+                        <p><strong>Description:</strong> ${task.description}</p>
+                        <p><strong>Category:</strong> ${task.category}</p>
+                        <p><strong>Priority:</strong> ${task.priority}</p>
+                        <p><strong>Status:</strong> ${task.status}</p>
+                        <p><strong>Location:</strong> ${task.location}</p>
+                        <p><strong>Created:</strong> ${task.createdAt}</p>
+                        <p><strong>Due Date:</strong> ${task.dueDate}</p>
+                        ${task.completedAt ? `<p><strong>Completed:</strong> ${task.completedAt}</p>` : ''}
+                        <p><strong>Reported By:</strong> ${task.reporter}</p>
+                    </div>
+                    <div class="task-assignment">
+                        <h3>Assignment</h3>
+                        ${worker ? `
+                        <div class="team-member" data-worker="${worker.id}">
+                            <img src="${worker.avatar}" alt="${worker.name}">
+                            <div class="member-info">
+                                <h4>${worker.name}</h4>
+                                <p>${worker.role}</p>
+                            </div>
+                        </div>
+                        ` : '<p>Not assigned yet</p>'}
+                        ${task.proofImage ? `
+                        <h3 style="margin-top: 20px;">Proof of Work</h3>
+                        <img src="${task.proofImage}" alt="Proof of work" class="proof-image">
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener to worker in modal if exists
+            if (worker) {
+                const workerElement = modalContent.querySelector('.team-member');
+                workerElement.addEventListener('click', function() {
+                    showWorkerDetails(worker.id);
+                });
+            }
+            
+            document.getElementById('taskModal').style.display = 'flex';
+        }
+
+        // Show worker details in modal
+        function showWorkerDetails(workerId) {
+            const worker = workers[workerId];
+            
+            const modalContent = document.getElementById('workerModalContent');
+            modalContent.innerHTML = `
+                <div class="worker-details">
+                    <div class="worker-profile">
+                        <img src="${worker.avatar}" alt="${worker.name}">
+                        <h3>${worker.name}</h3>
+                        <p>${worker.role}</p>
+                        <p><i class="fas fa-envelope"></i> ${worker.email}</p>
+                        <p><i class="fas fa-phone"></i> ${worker.phone}</p>
+                        <p><i class="fas fa-calendar-alt"></i> Joined: ${worker.joinDate}</p>
+                    </div>
+                    <div>
+                        <h3>Performance Metrics</h3>
+                        <div class="worker-stats">
+                            <div class="worker-stat">
+                                <h4>${worker.tasksCompleted}</h4>
+                                <p>Tasks Completed</p>
+                            </div>
+                            <div class="worker-stat">
+                                <h4>${worker.tasksInProgress}</h4>
+                                <p>Tasks In Progress</p>
+                            </div>
+                            <div class="worker-stat">
+                                <h4>${worker.rating}</h4>
+                                <p>Average Rating</p>
+                            </div>
+                            <div class="worker-stat">
+                                <h4>94%</h4>
+                                <p>SLA Compliance</p>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin-top: 20px;">Current Tasks</h3>
+                        <div class="task-list">
+                            ${getWorkerTasks(workerId)}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to tasks in worker modal
+            const taskItems = modalContent.querySelectorAll('.task-item');
+            taskItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const taskId = this.getAttribute('data-task');
+                    document.getElementById('workerModal').style.display = 'none';
+                    showTaskDetails(taskId);
+                });
+            });
+            
+            document.getElementById('workerModal').style.display = 'flex';
+        }
+
+        // Get worker's tasks for display
+        function getWorkerTasks(workerId) {
+            let html = '';
+            for (const taskId in tasks) {
+                if (tasks[taskId].assignedTo == workerId) {
+                    const task = tasks[taskId];
+                    html += `
+                        <div class="task-item" data-task="${task.id}">
+                            <div class="task-item-header">
+                                <span class="task-item-id">${task.id}</span>
+                                <span class="status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
+                            </div>
+                            <div class="task-item-desc">${task.description}</div>
+                        </div>
+                    `;
+                }
+            }
+            return html || '<p>No active tasks</p>';
+        }
+
+        // Show all tasks in modal
+        function showAllTasks() {
+            const tasksList = document.getElementById('allTasksList');
+            tasksList.innerHTML = '';
+            
+            for (const taskId in tasks) {
+                const task = tasks[taskId];
+                const worker = task.assignedTo ? workers[task.assignedTo] : null;
+                
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+                taskItem.setAttribute('data-task', task.id);
+                taskItem.innerHTML = `
+                    <div class="task-item-header">
+                        <span class="task-item-id">${task.id}</span>
+                        <span class="status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
+                    </div>
+                    <div class="task-item-desc">${task.description}</div>
+                    <div class="task-item-meta">
+                        <span><i class="fas fa-user"></i> ${worker ? worker.name : 'Unassigned'}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> ${task.location}</span>
+                        <span><i class="fas fa-clock"></i> Due: ${task.dueDate}</span>
+                    </div>
+                `;
+                
+                taskItem.addEventListener('click', function() {
+                    document.getElementById('tasksModal').style.display = 'none';
+                    showTaskDetails(task.id);
+                });
+                
+                tasksList.appendChild(taskItem);
+            }
+            
+            document.getElementById('tasksModal').style.display = 'flex';
+        }
+
+        // Show filtered tasks based on status
+        function showFilteredTasks(filter) {
+            // Update the heading based on the filter
+            const heading = document.getElementById('tasks-heading');
+            switch(filter) {
+                case 'pending':
+                    heading.textContent = 'Pending Tasks';
+                    break;
+                case 'in-progress':
+                    heading.textContent = 'Tasks In Progress';
+                    break;
+                case 'completed':
+                    heading.textContent = 'Completed Tasks';
+                    break;
+                case 'overdue':
+                    heading.textContent = 'Overdue Tasks';
+                    break;
+                default:
+                    heading.textContent = 'Recent Tasks';
+            }
+            
+            // Load filtered tasks
+            loadTasks(filter);
+            
+            // Show toast notification
+            showToast(`Showing ${Object.values(tasks).filter(task => {
+                if (filter === 'pending') return task.status === 'Pending';
+                if (filter === 'in-progress') return task.status === 'In Progress';
+                if (filter === 'completed') return task.status === 'Completed';
+                if (filter === 'overdue') return task.status === 'Overdue';
+                return false;
+            }).length} ${filter.replace('-', ' ')} tasks`);
+        }
+
+        // Show new task form
+        function showNewTaskForm() {
+            document.getElementById('newTaskModal').style.display = 'flex';
+        }
+
+        // Assign new task
+        function assignNewTask(e) {
+            e.preventDefault();
+            
+            const description = document.getElementById('taskDescription').value;
+            const category = document.getElementById('taskCategory').value;
+            const priority = document.getElementById('taskPriority').value;
+            const workerId = document.getElementById('taskWorker').value;
+            const sla = document.getElementById('taskSLA').value;
+            
+            // Generate a new task ID
+            const taskId = 'T-' + (Object.keys(tasks).length + 1000);
+            
+            // Create new task
+            tasks[taskId] = {
+                id: taskId,
+                description: description,
+                category: category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' '),
+                priority: priority.charAt(0).toUpperCase() + priority.slice(1),
+                status: 'Pending',
+                assignedTo: parseInt(workerId),
+                createdAt: new Date().toLocaleString(),
+                dueDate: new Date(Date.now() + sla * 60 * 60 * 1000).toLocaleString(),
+                completedAt: null,
+                location: 'To be determined',
+                reporter: 'Admin',
+                proofImage: null
+            };
+            
+            // Update worker's tasks in progress
+            workers[workerId].tasksInProgress++;
+            
+            // Show success message
+            showToast(`Task assigned successfully to ${workers[workerId].name}`);
+            
+            // Close the modal and reset form
+            document.getElementById('newTaskModal').style.display = 'none';
+            document.getElementById('newTaskForm').reset();
+            
+            // Refresh tasks
+            refreshTasks();
+        }
+
+        // Show assign task modal
+        function showAssignTaskModal(taskId) {
+            const task = tasks[taskId];
+            const assignTaskInfo = document.getElementById('assignTaskInfo');
+            
+            assignTaskInfo.innerHTML = `
+                <p><strong>Task ID:</strong> ${task.id}</p>
+                <p><strong>Description:</strong> ${task.description}</p>
+                <p><strong>Category:</strong> ${task.category}</p>
+                <p><strong>Priority:</strong> ${task.priority}</p>
+                <p><strong>Location:</strong> ${task.location}</p>
+            `;
+            
+            document.getElementById('assignTaskModal').setAttribute('data-task', taskId);
+            document.getElementById('assignTaskModal').style.display = 'flex';
+        }
+
+        // Confirm task assignment
+        function confirmAssignTask() {
+            const taskId = document.getElementById('assignTaskModal').getAttribute('data-task');
+            const workerId = document.getElementById('assignWorker').value;
+            
+            if (!workerId) {
+                alert('Please select a worker');
+                return;
+            }
+            
+            // Update task assignment
+            tasks[taskId].assignedTo = parseInt(workerId);
+            tasks[taskId].status = 'Pending';
+            
+            // Update worker's tasks in progress
+            workers[workerId].tasksInProgress++;
+            
+            // Show success message
+            showToast(`Task ${taskId} assigned to ${workers[workerId].name}`);
+            
+            // Close modal
+            document.getElementById('assignTaskModal').style.display = 'none';
+            
+            // Refresh tasks
+            refreshTasks();
+        }
+
+        // Refresh tasks
+        function refreshTasks() {
+            // In a real app, this would fetch updated data from the server
+            // For demo purposes, we'll just reload the current tasks
+            loadTasks();
+            loadUnassignedTasks();
+            
+            // Show refresh notification
+            showToast('Tasks refreshed successfully!');
+        }
+
+        // Save settings
+        function saveSettings(e) {
+            e.preventDefault();
+            
+            const departmentName = document.getElementById('departmentName').value;
+            const slaSettings = document.getElementById('slaSettings').value;
+            const notificationSettings = document.getElementById('notificationSettings').value;
+            
+            // In a real app, we would send this data to the server
+            console.log('Settings saved:', {
+                departmentName,
+                slaSettings,
+                notificationSettings
+            });
+            
+            // Show success message
+            showToast('Settings saved successfully!');
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Simulate real-time updates for stats
+        function updateStats() {
+            // In a real application, this would fetch data from an API
+            const pendingElement = document.querySelector('.stat-card:nth-child(1) h3');
+            const inProgressElement = document.querySelector('.stat-card:nth-child(2) h3');
+            
+            // Randomly update values for demo purposes
+            const pendingValue = parseInt(pendingElement.textContent);
+            const inProgressValue = parseInt(inProgressElement.textContent);
+            
+            // Small random changes to simulate real-time updates
+            const newPending = Math.max(0, pendingValue + Math.floor(Math.random() * 3) - 1);
+            const newInProgress = Math.max(0, inProgressValue + Math.floor(Math.random() * 3) - 1);
+            
+            pendingElement.textContent = newPending;
+            inProgressElement.textContent = newInProgress;
+        }
+    </script>
+</body>
+</html>
